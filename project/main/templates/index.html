@@ -1,19 +1,21 @@
-{% extends "_internal/base.html" %}
+{% extends "main/base.html" %}
 {% block title %}{% endblock %}
 {% block description %}{% endblock %}
 {% block content %}
-<div class="container">
-  <div class="blog-header">
-    <h1 class="blog-title">Kay Template</h1>
-    <p class="lead blog-description">Quick Start Template for AppEngine Application</p>
-  </div>
-  <div class="row">
-    <div class="col-sm-8 blog-main">
-      <div class="blog-post">
-        <h2 class="blog-post-title">hoge</h2>
-        <p>description</p>
-      </div>
+    <div class="container">
+        <div class="blog-header">
+            <h1 class="blog-title">Event Calendar</h1>
+        </div>
+        <div class="row">
+            <div class="col-sm-6 blog-main">
+                {{ calendar|safe }}
+            </div>
+            <div class="col-sm-6 blog-main">
+                <div class="blog-post">
+                    <h2 class="blog-post-title">hoge</h2>
+                    <p>description</p>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 {% endblock %}
