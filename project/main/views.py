@@ -48,7 +48,7 @@ class eventCalendar(calendar.HTMLCalendar):
         a('<tr>')
         a('<th class="left cmonth" id="%s">' % pre_month_id)
         a('<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></th>')
-        a('<th colspan="5" class="center">%s/%s</th>' % (str(self.theyear), str(self.themonth)))
+        a('<th colspan="5" class="center">%s %s</th>' % (calendar.month_name[self.themonth], str(self.theyear)))
         a('<th class="right cmonth" id="%s">' % next_month_id)
         a('<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></th></tr>')
         a(self.formatweekheader())
