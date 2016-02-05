@@ -27,22 +27,30 @@ class eventCalendar(calendar.HTMLCalendar):
         else:
             td_id = "%s-%s-%s" % (str(self.theyear), str(self.themonth).zfill(2), str(day).zfill(2))
             if self.now.day == day and self.themonth == self.now.month and self.theyear == self.now.year:
-                return '<td class="%s today selected" id="%s">%d</td>' % (self.cssclasses[weekday], td_id, day)
-            return '<td class="%s" id="%s">%d</td>' % (self.cssclasses[weekday], td_id, day)
+                return '<td class="aday %s today selected" id="%s">%d</td>' % (self.cssclasses[weekday], td_id, day)
+            return '<td class="aday %s" id="%s">%d</td>' % (self.cssclasses[weekday], td_id, day)
 
     def formatmonth(self, withyear=True):
 
         """
         Return a formatted month as a table.
         """
+        this_month = datetime(self.theyear, self.themonth, 1)
+        next_month = add_months(this_month, 1)
+        next_month_id = "%d-%s" % (next_month.year, str(next_month.month).zfill(2))
+        pre_month = add_months(this_month, -1)
+        pre_month_id = "%d-%s" % (pre_month.year, str(pre_month.month).zfill(2))
         v = []
         a = v.append
         a('<table class="table table-bordered">')
         a('\n')
         a('<thead>')
-        a('<tr><th class="left"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></th>')
+        a('<tr>')
+        a('<th class="left cmonth" id="%s">' % pre_month_id)
+        a('<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></th>')
         a('<th colspan="5" class="center">%s/%s</th>' % (str(self.theyear), str(self.themonth)))
-        a('<th class="right"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></th></tr>')
+        a('<th class="right cmonth" id="%s">' % next_month_id)
+        a('<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></th></tr>')
         a(self.formatweekheader())
         a('</thead>\n')
         a('<tbody>\n')
@@ -56,11 +64,26 @@ class eventCalendar(calendar.HTMLCalendar):
 
 
 def index(request):
+    try:
+        selectd_month_id = request.args["month"]
+    except:
+        selectd_month_id = None
     now = datetime.now()
-    selected_month_calendar = eventCalendar(now, now.year, now.month)
+    if selectd_month_id is not None:
+        month_data = selectd_month_id.split("-")
+        try:
+            theyear = int(month_data[0])
+            themonth = int(month_data[1])
+        except:
+            theyear = now.year
+            themonth = now.month
+    else:
+        theyear = now.year
+        themonth = now.month
+    selected_month_calendar = eventCalendar(now, theyear, themonth)
     selected_month_calendar.setfirstweekday(calendar.SUNDAY)
     calendar_html = selected_month_calendar.formatmonth()
-    next_month = add_months(now, 1)
+    next_month = add_months(datetime(theyear, themonth, 1), 1)
     next_month_calendar = eventCalendar(now, next_month.year, next_month.month)
     next_month_calendar.setfirstweekday(calendar.SUNDAY)
     calendar_html += next_month_calendar.formatmonth()

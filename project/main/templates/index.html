@@ -18,4 +18,15 @@
             </div>
         </div>
     </div>
+    <script>
+        $(document).ready(function() {
+            $(document).on("click", "td.aday", function () {
+                $(".selected").removeClass("selected");
+                $(this).addClass("selected");
+            });
+            $(document).on("click", "th.cmonth", function () {
+                location.href = "/?month=" + $(this).attr("id");
+            });
+        });
+    </script>
 {% endblock %}
