@@ -9,7 +9,7 @@
     <div class="row">
       <div class="col-sm-8 blog-main">
       {{ request.form.errors }}
-        {% call form(class_='form-horizontal',role='form') %}
+        {% call form(class_='form-horizontal',role='form', id='event-form') %}
           {% for f in form %}
             <div class="form-group">
               {{ form[f.name].label(class_='col-lg-2 control-label')|safe }}
@@ -34,6 +34,10 @@
     $(document).ready(function () {
       $('#f_event_date').datetimepicker({
         format:'Y-m-d H:i'
+      });
+      $("#event-form").on("submit", function(){
+        var isoDate = new Date($("#f_event_date").val()).toISOString();
+        $('#f_event_date').val(isoDate.replace("T", " ").slice(0,16));
       });
     });
   </script>

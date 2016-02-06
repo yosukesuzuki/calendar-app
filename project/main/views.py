@@ -5,6 +5,7 @@ from werkzeug import redirect
 from kay.utils import render_to_response, url_for
 from kay.utils import forms
 from core.models import Editor
+from admin.urls import generate_password
 
 
 def add_months(sourcedate, months):
@@ -105,7 +106,7 @@ def login(request):
             editor = Editor.get_by_key_name(request.form['editor_id'])
             if editor is None:
                 return redirect(url_for('main/login', error="invalid"))
-            if editor.password == request.form['password']:
+            if editor.password == generate_password(request.form['password']):
                 request.session['editor'] = True
                 request.session['editor_id'] = editor.key().name()
                 return redirect(url_for('main/index'))
