@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 import calendar
 from datetime import datetime, date
-from kay.utils import render_to_response
-
+from werkzeug import redirect
+from kay.utils import render_to_response, url_for
+from kay.utils import forms
+from kay.utils.validators import ValidationError
+from core.models import Editor
 
 def add_months(sourcedate, months):
     month = sourcedate.month - 1 + months
@@ -63,6 +66,11 @@ class eventCalendar(calendar.HTMLCalendar):
         return ''.join(v)
 
 
+class LoginForm(forms.Form):
+    editor_id = forms.TextField(required=True, max_length=5)
+    password = forms.TextField(required=True, widget=forms.PasswordInput)
+
+
 def index(request):
     try:
         selectd_month_id = request.args["month"]
@@ -87,4 +95,20 @@ def index(request):
     next_month_calendar = eventCalendar(now, next_month.year, next_month.month)
     next_month_calendar.setfirstweekday(calendar.SUNDAY)
     calendar_html += next_month_calendar.formatmonth()
-    return render_to_response('main/index.html', {'message': 'Hello', 'calendar': calendar_html})
+    return render_to_response('main/index.html', {'calendar': calendar_html})
+
+
+def login(request):
+    form = LoginForm()
+    if request.method == "POST":
+        if form.validate(request.form):
+            editor = Editor.get_by_key_name(request.form['editor_id'])
+            if editor is None:
+                return redirect(url_for('main/login', error="invalid"))
+            if editor.password == request.form['password']:
+                request.session['editor'] = True
+                return redirect(url_for('main/index'))
+            return redirect(url_for('main/login', error="invalid"))
+        else:
+            return redirect(url_for('main/login', error="invalid"))
+    return render_to_response("main/login.html", {"form": form.as_widget()})

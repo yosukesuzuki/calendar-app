@@ -1,0 +1,31 @@
+{% extends "main/base.html" %}
+{% block title %}Login{% endblock %}
+{% block description %}{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="blog-header">
+    <h1 class="blog-title">Login</h1>
+    {% if request.args['error'] == 'invalid' %}
+    <p class="lead blog-description">Login failed</p>
+    {% endif %}
+  </div>
+ <div class="row">
+    <div class="col-sm-8 blog-main">
+      {% call form(class_='form-horizontal',role='form') %}
+        {% for f in form %}
+        <div class="form-group">
+            {{ form[f.name].label(class_='col-lg-2 control-label')|safe }}
+            <div class="col-lg-10">
+            {{ form[f.name].render(class_='form-control')|safe }}
+            </div>
+        </div>
+        {% endfor %}
+        <div class="form-actions">
+          <button class="btn btn-lg btn-block btn-primary" type="submit">Login</button>
+        </div>
+      {% endcall %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+

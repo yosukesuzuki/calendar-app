@@ -1,4 +1,4 @@
-application: kay-template
+application: calendar-app
 version: 1
 runtime: python27
 api_version: 1
@@ -37,6 +37,7 @@ handlers:
 
 - url: /.*
   script: kay.main.application
+  secure: always
 
 libraries:
 - name: jinja2

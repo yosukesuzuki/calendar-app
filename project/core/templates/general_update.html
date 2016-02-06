@@ -1,0 +1,29 @@
+{% extends "main/base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block description %}{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="blog-header">
+    <h1 class="blog-title">{{ _('Update of model: %s' % model) }}</h1>
+    <p class="lead blog-description">{{ message }}</p>
+  </div>
+ <div class="row">
+    <div class="col-sm-8 blog-main">
+      {% call form(class_='form-horizontal',role='form') %}
+        {% for f in form %}
+        <div class="form-group">
+            {{ form[f.name].label(class_='col-lg-2 control-label')|safe }}
+            <div class="col-lg-10">
+            {{ form[f.name].render(class_='form-control')|safe }}
+            </div>
+        </div>
+        {% endfor %}
+        <div class="form-actions">
+          <button class="btn btn-lg btn-block btn-primary" type="submit">{{_('Save')}}</button>
+        </div>
+      {% endcall %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+

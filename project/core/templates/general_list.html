@@ -1,0 +1,47 @@
+{% extends "main/base.html" %}
+{% block title %}{{ _('List of model: %s' % model) }}{% endblock %}
+{% block description %}{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="blog-header">
+    <h1 class="blog-title">{{ _('List of model: %s' % model) }}</h1>
+    <p class="lead blog-description">{{ message }}</p>
+  </div>
+ <div class="row">
+    <div class="col-sm-8 blog-main">
+      <div class="row" style="margin-bottom:20px;">
+        <div class="col-sm-3">
+        <a href="{{ create_url() }}" class="btn btn-primary" id="createEntity">Create new entity</a>
+        </div>
+      </div>
+      <table id="content-list-table" class="table table-bordered table-hover">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Update</th>
+            <th>Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+          <tr>
+            <td>
+            {{ entity }}
+            </td>
+            <td>
+              <a class="btn btn-default btn-sm" href="{{ update_url(entity) }}">{{ _('Update') }}</a>
+            </td>
+            <td>
+              <a class="btn btn-default btn-sm" href="{{ delete_url(entity) }}">{{ _('Delete') }}</a>
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% if cursor %}
+  <a href="{{ list_url(cursor) }}">{{ _('Next Page') }}</a>
+{% endif %}
+{% endblock %}

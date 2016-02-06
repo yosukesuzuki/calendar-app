@@ -5,18 +5,29 @@ from kay.routing import (
     ViewGroup, Rule
 )
 
-from core.models import Article
-from admin.forms import ArticleForm
+from core.models import Editor
+from core.forms import EditorForm
 
 
-class ArticleCRUDViewGroup(crud.CRUDViewGroup):
-    model = Article
-    form = ArticleForm
+class EditorCRUDViewGroup(crud.CRUDViewGroup):
+    model = Editor
+    form = EditorForm
+    templates = {
+        'show': 'core/general_show.html',
+        'list': 'core/general_list.html',
+        'update': 'core/general_update.html'
+    }
+
+    def get_query(self, request):
+        return self.model.all().order('-created_at')
+
+    def get_additional_context_on_create(self, request, form):
+        return {'key_name': request.form['editor_id']}
 
 
 view_groups = [
     ViewGroup(
         Rule('/', endpoint='index', view='admin.views.index'),
     ),
-    ArticleCRUDViewGroup(),
+    EditorCRUDViewGroup(),
 ]

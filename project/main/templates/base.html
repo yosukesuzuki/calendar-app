@@ -10,6 +10,7 @@
     <title>{% block title %}{% endblock %} Kay Framework Template</title>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="/media/css/flatly.min.css">
+    <link href="/media/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <style>
         body {
@@ -147,8 +148,8 @@
             <a class="navbar-brand" href="/">Calendar App</a>
         </div>
         <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li><a href="https://github.com/yosukesuzuki/kay-template">Github</a></li>
+            <ul class="nav navbar-nav pull-right">
+                <li><a href="{{ url_for('main/login') }}">Login</a></li>
             </ul>
         </div>
     </div>
@@ -159,5 +160,7 @@
 </div>
 <!-- /container -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/media/js/bootstrap-datetimepicker.min.js" charset="UTF-8"></script>
+<script type="text/javascript" src="/media/js/locales/bootstrap-datetimepicker.ja.js" charset="UTF-8"></script>
 </body>
 </html>
