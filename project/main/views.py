@@ -4,8 +4,8 @@ from datetime import datetime, date
 from werkzeug import redirect
 from kay.utils import render_to_response, url_for
 from kay.utils import forms
-from kay.utils.validators import ValidationError
 from core.models import Editor
+
 
 def add_months(sourcedate, months):
     month = sourcedate.month - 1 + months
@@ -107,8 +107,17 @@ def login(request):
                 return redirect(url_for('main/login', error="invalid"))
             if editor.password == request.form['password']:
                 request.session['editor'] = True
+                request.session['editor_id'] = editor.key().name()
                 return redirect(url_for('main/index'))
             return redirect(url_for('main/login', error="invalid"))
         else:
             return redirect(url_for('main/login', error="invalid"))
     return render_to_response("main/login.html", {"form": form.as_widget()})
+
+
+def logout(request):
+    if 'editor' in request.session:
+        del request.session['editor']
+    if 'editor_id'in request.session:
+        del request.session['editor_id']
+    return redirect(url_for('main/index'))

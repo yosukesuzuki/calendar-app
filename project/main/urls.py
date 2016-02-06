@@ -28,11 +28,11 @@ class EventCRUDViewGroup(crud.CRUDViewGroup):
         return url_for('main/index')
 
 
-
 view_groups = [
     ViewGroup(
         Rule('/', endpoint='index', view='main.views.index'),
         Rule('/login', endpoint='login', view='main.views.login'),
+        Rule('/logout', endpoint='logout', view='main.views.logout'),
     ),
     EventCRUDViewGroup(),
 ]

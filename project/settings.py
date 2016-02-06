@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 DEFAULT_TIMEZONE = 'UTC'
-DEBUG = True
+DEBUG = False
 PROFILE = False
 SECRET_KEY = 'ReplaceItWithSecretString'
 SESSION_PREFIX = 'gaesess:'

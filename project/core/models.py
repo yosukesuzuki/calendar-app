@@ -12,9 +12,9 @@ class AdminUser(GoogleUser):
 
 
 class Editor(db.Model):
-    editor_id = db.StringProperty(verbose_name="Editor ID")
-    password = db.StringProperty(verbose_name="Password")
-    editor_name = db.StringProperty(verbose_name="Editor Name")
+    editor_id = db.StringProperty(verbose_name="Editor ID", required=True)
+    password = db.StringProperty(verbose_name="Password", required=True)
+    editor_name = db.StringProperty(verbose_name="Editor Name", required=True)
     updated_at = db.DateTimeProperty(auto_now=True)
     created_at = db.DateTimeProperty(auto_now_add=True)
 
@@ -23,7 +23,7 @@ class Editor(db.Model):
 
 
 class Event(db.Model):
-    event_date = db.StringProperty(verbose_name="Event Date")
+    event_date = db.DateTimeProperty(verbose_name="Event Date", required=True)
     title = db.StringProperty(verbose_name="Title", required=True)
     description = db.TextProperty(verbose_name="Description", required=True)
     updated_log = db.TextProperty()

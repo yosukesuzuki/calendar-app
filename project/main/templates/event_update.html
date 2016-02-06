@@ -8,6 +8,7 @@
     </div>
     <div class="row">
       <div class="col-sm-8 blog-main">
+      {{ request.form.errors }}
         {% call form(class_='form-horizontal',role='form') %}
           {% for f in form %}
             <div class="form-group">
@@ -15,6 +16,11 @@
               <div class="col-lg-10">
                 {{ form[f.name].render(class_='form-control')|safe }}
               </div>
+              {% if f.errors|length > 0 %}
+                {% for e in f.errors %}
+                  <div class="alert alert-warning" role="alert">{{ e }}</div>
+                {% endfor %}
+              {% endif %}
             </div>
           {% endfor %}
           <div class="form-actions">
@@ -26,7 +32,9 @@
   </div>
   <script>
     $(document).ready(function () {
-      $("#f_event_date").datetimepicker({format: 'yyyy-mm-dd hh:ii'});
+      $('#f_event_date').datetimepicker({
+        format:'Y-m-d H:i'
+      });
     });
   </script>
 {% endblock %}
