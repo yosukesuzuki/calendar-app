@@ -31,6 +31,7 @@ class EventCRUDViewGroup(crud.CRUDViewGroup):
 view_groups = [
     ViewGroup(
         Rule('/', endpoint='index', view='main.views.index'),
+        Rule('/feed/events', endpoint='event_feed', view='main.views.event_feed'),
         Rule('/login', endpoint='login', view='main.views.login'),
         Rule('/logout', endpoint='logout', view='main.views.logout'),
     ),

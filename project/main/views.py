@@ -2,9 +2,9 @@
 import calendar
 from datetime import datetime, date
 from werkzeug import redirect
-from kay.utils import render_to_response, url_for
+from kay.utils import render_to_response, url_for, render_json_response
 from kay.utils import forms
-from core.models import Editor
+from core.models import Editor, Event
 from admin.urls import generate_password
 
 
@@ -99,6 +99,16 @@ def index(request):
     return render_to_response('main/index.html', {'calendar': calendar_html})
 
 
+def event_feed(request):
+    now = datetime.now()
+    results = Event.all().filter(u'event_date >', datetime(now.year, now.month, now.day)).order('event_date').fetch(
+        1000)
+    events = [
+        {'date': r.event_date.strftime('%Y-%m-%d %H:%M'),
+         'title': r.title, 'description': r.description, 'key': str(r.key())} for r in results]
+    return render_json_response({'events': events}, mimetype='application/json')
+
+
 def login(request):
     form = LoginForm()
     if request.method == "POST":
@@ -119,6 +129,6 @@ def login(request):
 def logout(request):
     if 'editor' in request.session:
         del request.session['editor']
-    if 'editor_id'in request.session:
+    if 'editor_id' in request.session:
         del request.session['editor_id']
     return redirect(url_for('main/index'))

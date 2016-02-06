@@ -149,7 +149,11 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav pull-right">
+              {% if request.session['editor'] == True %}
+                <li><a href="{{ url_for('main/logout') }}">Logout</a></li>
+              {% else %}
                 <li><a href="{{ url_for('main/login') }}">Login</a></li>
+              {% endif %}
             </ul>
         </div>
     </div>

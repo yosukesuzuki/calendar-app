@@ -10,7 +10,7 @@
             <div class="col-sm-6 blog-main">
                 {{ calendar|safe }}
             </div>
-            <div class="col-sm-6 blog-main">
+            <div class="col-sm-6 blog-main" id="event-feed">
                 <div class="blog-post">
                     <h2 class="blog-post-title">hoge</h2>
                     <p>description</p>
@@ -26,6 +26,23 @@
             });
             $(document).on("click", "th.cmonth", function () {
                 location.href = "/?month=" + $(this).attr("id");
+            });
+            $.ajax({url: "/feed/events",
+            }).done(function(data){
+              var feed_html = "";
+              var feed_template = `
+                <div class="blog-post">
+                    <h2 class="blog-post-title">$title</h2>
+                    <p>$date</p>
+                    <p>$description</p>
+                </div>
+              `;
+              $.each(data.events, function(i, val){
+                feed_html += feed_template.replace('$title', val.title).replace('$date', val.date).replace('$description', val.description);
+              });
+              $("#event-feed").html(feed_html);
+            }).fail(function(data){
+              $("#event-feed").html("failed");
             });
         });
     </script>
