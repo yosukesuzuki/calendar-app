@@ -106,7 +106,8 @@ def event_feed(request):
     events = [
         {'date': r.event_date.strftime('%Y-%m-%d %H:%M'),
          'title': r.title, 'description': r.description, 'key': str(r.key())} for r in results]
-    return render_json_response({'events': events}, mimetype='application/json')
+    feed_title = 'Upcoming Event'
+    return render_json_response({'events': events, 'title': feed_title}, mimetype='application/json')
 
 
 def login(request):

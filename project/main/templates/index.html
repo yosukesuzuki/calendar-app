@@ -11,10 +11,7 @@
                 {{ calendar|safe }}
             </div>
             <div class="col-sm-6 blog-main" id="event-feed">
-                <div class="blog-post">
-                    <h2 class="blog-post-title">hoge</h2>
-                    <p>description</p>
-                </div>
+              <button class="btn btn-lg btn-warning"><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Loading...</button>
             </div>
         </div>
     </div>
@@ -29,16 +26,25 @@
             });
             $.ajax({url: "/feed/events",
             }).done(function(data){
-              var feed_html = "";
+              var feed_html = "<h2>"+data.title+"</h2>";
               var feed_template = `
                 <div class="blog-post">
-                    <h2 class="blog-post-title">$title</h2>
+                    <h3 class="blog-post-title">$title</h3>
                     <p>$date</p>
                     <p>$description</p>
+                    <a type="button" class="btn btn-default" aria-label="Left Align" href="/event/update/$key">
+                      <span class="glyphicon glyphicon-pencil" aria-hidden="true">Edit</span>
+                    </a>
                 </div>
+                <hr/>
               `;
               $.each(data.events, function(i, val){
-                feed_html += feed_template.replace('$title', val.title).replace('$date', val.date).replace('$description', val.description);
+                var localTime  = moment.utc(val.date).toDate();
+                localTime = moment(localTime).format('YYYY-MM-DD HH:mm');
+                feed_html += feed_template.replace('$title', val.title)
+                    .replace('$date', localTime)
+                    .replace('$description', marked(val.description))
+                    .replace('$key', val.key);
               });
               $("#event-feed").html(feed_html);
             }).fail(function(data){
