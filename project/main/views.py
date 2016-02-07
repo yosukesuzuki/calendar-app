@@ -101,7 +101,7 @@ def index(request):
 
 def event_feed(request):
     now = datetime.now()
-    results = Event.all().filter(u'event_date >', datetime(now.year, now.month, now.day)).order('event_date').fetch(
+    results = Event.all().filter(u'event_date >', datetime(now.year, now.month, 1)).order('event_date').fetch(
         1000)
     events = [
         {'date': r.event_date.strftime('%Y-%m-%d %H:%M'),

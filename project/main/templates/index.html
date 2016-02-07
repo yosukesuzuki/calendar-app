@@ -16,18 +16,12 @@
         </div>
     </div>
     <script>
-        $(document).ready(function() {
-            $(document).on("click", "td.aday", function () {
-                $(".selected").removeClass("selected");
-                $(this).addClass("selected");
-            });
-            $(document).on("click", "th.cmonth", function () {
-                location.href = "/?month=" + $(this).attr("id");
-            });
-            $.ajax({url: "/feed/events",
-            }).done(function(data){
-              var feed_html = "<h2>"+data.title+"</h2>";
-              var feed_template = `
+      function initEventList(){
+        var d = $.Deferred();
+        $.ajax({url: "/feed/events",
+        }).done(function(data){
+          var feedHTML = "<h2>"+data.title+"</h2>";
+          var feedTemplate = `
                 <div class="blog-post">
                     <h3 class="blog-post-title">$title</h3>
                     <p>$date</p>
@@ -38,18 +32,52 @@
                 </div>
                 <hr/>
               `;
-              $.each(data.events, function(i, val){
-                var localTime  = moment.utc(val.date).toDate();
-                localTime = moment(localTime).format('YYYY-MM-DD HH:mm');
-                feed_html += feed_template.replace('$title', val.title)
-                    .replace('$date', localTime)
-                    .replace('$description', marked(val.description))
-                    .replace('$key', val.key);
-              });
-              $("#event-feed").html(feed_html);
-            }).fail(function(data){
-              $("#event-feed").html("failed");
-            });
+          var utcNow = moment.utc().format('YYYY-MM-DD');
+          var eventByDay = {};
+          $.each(data.events, function(i, val){
+            var localTime  = moment.utc(val.date).toDate();
+            localTime = moment(localTime).format('YYYY-MM-DD HH:mm');
+            var aDay = localTime.slice(0,10);
+            var aDayFeedHTML = feedTemplate.replace('$title', val.title)
+                .replace('$date', localTime)
+                .replace('$description', marked(val.description))
+                .replace('$key', val.key);
+            if(aDay >= utcNow){
+              feedHTML += aDayFeedHTML;
+            }
+            if(aDay in eventByDay){
+              eventByDay[aDay] += aDayFeedHTML;
+            }else{
+              eventByDay[aDay] = aDayFeedHTML;
+            }
+          });
+          $("#event-feed").html(feedHTML);
+          $(document).on("click", "td.aday", function () {
+            $(".selected").removeClass("selected");
+            $(this).addClass("selected");
+            drawEventList(eventByDay, $(this).attr('id'));
+          });
+          d.resolve();
+        }).fail(function(data){
+          $("#event-feed").html("failed");
+          d.reject();
         });
+        return d.promise();
+      }
+      function drawEventList(eventByDay, aDay){
+        console.log('selected!:'+aDay);
+        var feedHTML = "<h2>"+aDay+"&nbsp;Events</h2>";
+        if(aDay in eventByDay) {
+          $("#event-feed").html(feedHTML+eventByDay[aDay]);
+        }else{
+          $("#event-feed").html(feedHTML+'<div class="blog-post"><h3 class="blog-post-title">no events</h3></div>');
+        }
+      }
+      $(document).ready(function() {
+          $(document).on("click", "th.cmonth", function () {
+              location.href = "/?month=" + $(this).attr("id");
+          });
+          initEventList();
+      });
     </script>
 {% endblock %}
