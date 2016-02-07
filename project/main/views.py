@@ -31,8 +31,8 @@ class eventCalendar(calendar.HTMLCalendar):
         else:
             td_id = "%s-%s-%s" % (str(self.theyear), str(self.themonth).zfill(2), str(day).zfill(2))
             if self.now.day == day and self.themonth == self.now.month and self.theyear == self.now.year:
-                return '<td class="aday %s today selected" id="%s">%d</td>' % (self.cssclasses[weekday], td_id, day)
-            return '<td class="aday %s" id="%s">%d</td>' % (self.cssclasses[weekday], td_id, day)
+                return '<td class="aday %s today selected" id="%s">%d<br/><span>&nbsp;</span></td>' % (self.cssclasses[weekday], td_id, day)
+            return '<td class="aday %s" id="%s">%d<br/><span>&nbsp;</span></td>' % (self.cssclasses[weekday], td_id, day)
 
     def formatmonth(self, withyear=True):
 

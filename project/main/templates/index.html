@@ -46,12 +46,13 @@
               feedHTML += aDayFeedHTML;
             }
             if(aDay in eventByDay){
-              eventByDay[aDay] += aDayFeedHTML;
+              eventByDay[aDay].push(aDayFeedHTML);
             }else{
-              eventByDay[aDay] = aDayFeedHTML;
+              eventByDay[aDay] = [aDayFeedHTML];
             }
           });
           $("#event-feed").html(feedHTML);
+          drawBalloon(eventByDay);
           $(document).on("click", "td.aday", function () {
             $(".selected").removeClass("selected");
             $(this).addClass("selected");
@@ -68,10 +69,21 @@
         console.log('selected!:'+aDay);
         var feedHTML = "<h2>"+aDay+"&nbsp;Events</h2>";
         if(aDay in eventByDay) {
-          $("#event-feed").html(feedHTML+eventByDay[aDay]);
+          $.each(eventByDay[aDay], function(){
+            feedHTML += this;
+          });
+          $("#event-feed").html(feedHTML);
         }else{
           $("#event-feed").html(feedHTML+'<div class="blog-post"><h3 class="blog-post-title">no events</h3></div>');
         }
+      }
+      function drawBalloon(eventByDay){
+        $.each($("table tbody tr td"), function(){
+          if($(this).attr('id') in eventByDay) {
+            this.querySelector('span').setAttribute("class","badge");
+            this.querySelector('span').innerText = eventByDay[$(this).attr('id')].length;
+          }
+        });
       }
       $(document).ready(function() {
           $(document).on("click", "th.cmonth", function () {

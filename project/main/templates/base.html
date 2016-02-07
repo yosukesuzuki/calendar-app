@@ -7,7 +7,7 @@
   <meta name="description" content="{% block description %}{% endblock %}">
   <meta name="author" content="">
   <link rel="shortcut icon" href="/favicon.ico">
-  <title>{% block title %}{% endblock %} Kay Framework Template</title>
+  <title>{% block title %}{% endblock %} Calendar App</title>
   <!-- Latest compiled and minified CSS -->
   <link rel="stylesheet" href="/media/css/flatly.min.css">
   <link rel="stylesheet" type="text/css" href="/media/css/jquery.datetimepicker.css">
@@ -118,9 +118,13 @@
     .table thead th.right {
       text-align: right;
     }
+    .table tbody tr {
+      min-height: 67px;
+    }
 
-    .table tbody td {
+    .table tbody tr td {
       text-align: center;
+      padding:5px;
     }
 
     .table tbody td.sun {
@@ -168,7 +172,6 @@
     .blog-main h2 {
       margin-top: 0px;
     }
-
   </style>
 </head>
 <body>
