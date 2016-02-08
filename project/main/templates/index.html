@@ -34,13 +34,17 @@
               `;
           var utcNow = moment.utc().format('YYYY-MM-DD');
           var eventByDay = {};
+          var renderer = new marked.Renderer();
+          renderer.heading = function (text, level) {
+            return '<h' + (level+3) + '>'+text+'</h' + (level+3) + '>';
+          };
           $.each(data.events, function(i, val){
             var localTime  = moment.utc(val.date).toDate();
             localTime = moment(localTime).format('YYYY-MM-DD HH:mm');
             var aDay = localTime.slice(0,10);
             var aDayFeedHTML = feedTemplate.replace('$title', val.title)
                 .replace('$date', localTime)
-                .replace('$description', marked(val.description))
+                .replace('$description', marked(val.description,  { renderer: renderer }))
                 .replace('$key', val.key);
             if(aDay >= utcNow){
               feedHTML += aDayFeedHTML;
