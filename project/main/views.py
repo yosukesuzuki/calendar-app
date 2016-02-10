@@ -100,13 +100,23 @@ def index(request):
 
 
 def event_feed(request):
-    now = datetime.now()
-    results = Event.all().filter(u'event_date >', datetime(now.year, now.month, 1)).order('event_date').fetch(
-        1000)
+    try:
+        theyear_themonth = request.args['month'].split('-')
+        theyear = int(theyear_themonth[0])
+        themonth = int(theyear_themonth[1])
+        feed_title = 'Events of: %s %d' % (calendar.month_name[themonth], theyear)
+    except:
+        now = datetime.now()
+        theyear = now.year
+        themonth = now.month
+        feed_title = 'Upcoming Event'
+    first_day_of_themonth = datetime(theyear, themonth, 1)
+    three_month_after = add_months(first_day_of_themonth, 2)
+    results = Event.all().filter(u'event_date >=', first_day_of_themonth).filter(
+        u'event_date <', three_month_after).order('event_date').fetch(1000)
     events = [
         {'date': r.event_date.strftime('%Y-%m-%d %H:%M'),
          'title': r.title, 'description': r.description, 'key': str(r.key())} for r in results]
-    feed_title = 'Upcoming Event'
     return render_json_response({'events': events, 'title': feed_title}, mimetype='application/json')
 
 

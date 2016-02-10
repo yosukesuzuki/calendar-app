@@ -32,8 +32,13 @@
   </div>
   <script>
     $(document).ready(function () {
+      if($("#f_event_date").val() != '') {
+        var localTime = moment.utc($("#f_event_date").val()).toDate();
+        localTime = moment(localTime).format('YYYY-MM-DD HH:mm');
+        $("#f_event_date").val(localTime);
+      }
       $('#f_event_date').datetimepicker({
-        format:'Y-m-d H:i'
+        format:'YYYY-MM-DD HH:mm'
       });
       $("#event-form").on("submit", function(){
         var isoDate = new Date($("#f_event_date").val()).toISOString();
