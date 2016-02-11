@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import json
+from datetime import datetime
 from google.appengine.api import memcache
 from kay.generics import crud
 from kay.routing import (
@@ -32,6 +34,17 @@ class EventCRUDViewGroup(crud.CRUDViewGroup):
 
     def get_query(self, request):
         return self.model.all().order('-event_date')
+
+    def get_additional_context_on_create(self, request, form):
+        return {'updated_log': json.dumps([{'editor_name': request.session['editor_name'],
+                                            'updated_at': datetime.now().strftime('%Y-%m-%d %H:%M')}])}
+
+    def get_additional_context_on_update(self, request, form):
+        entity_key = request.path.split('/')[3]
+        updated_log = json.loads(self.model.get(entity_key).updated_log)
+        updated_log.append({'editor_name': request.session['editor_name'],
+                            'updated_at': datetime.now().strftime('%Y-%m-%d %H:%M')})
+        return {'updated_log': json.dumps(updated_log)}
 
 
 class EventTemplateCRUDViewGroup(crud.CRUDViewGroup):

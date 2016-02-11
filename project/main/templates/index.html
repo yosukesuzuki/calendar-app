@@ -64,7 +64,7 @@
                 .replace('$date', localTime)
                 .replace('$description', marked(val.description,  { renderer: renderer }))
                 .replace('$key', val.key);
-            if(aDay >= utcNow){
+            if((aDay >= utcNow)&&(i < 30)){
               feedHTML += aDayFeedHTML;
             }
             if(aDay in eventByDay){
