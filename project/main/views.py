@@ -2,9 +2,10 @@
 import calendar
 from datetime import datetime, date
 from werkzeug import redirect
+from google.appengine.api import memcache
 from kay.utils import render_to_response, url_for, render_json_response
 from kay.utils import forms
-from core.models import Editor, Event
+from core.models import Editor, Event, EventTemplate
 from admin.urls import generate_password
 
 
@@ -31,8 +32,10 @@ class eventCalendar(calendar.HTMLCalendar):
         else:
             td_id = "%s-%s-%s" % (str(self.theyear), str(self.themonth).zfill(2), str(day).zfill(2))
             if self.now.day == day and self.themonth == self.now.month and self.theyear == self.now.year:
-                return '<td class="aday %s today selected" id="%s">%d<br/><span>&nbsp;</span></td>' % (self.cssclasses[weekday], td_id, day)
-            return '<td class="aday %s" id="%s">%d<br/><span>&nbsp;</span></td>' % (self.cssclasses[weekday], td_id, day)
+                return '<td class="aday %s today selected" id="%s">%d<br/><span>&nbsp;</span></td>' % (
+                    self.cssclasses[weekday], td_id, day)
+            return '<td class="aday %s" id="%s">%d<br/><span>&nbsp;</span></td>' % (
+                self.cssclasses[weekday], td_id, day)
 
     def formatmonth(self, withyear=True):
 
@@ -46,7 +49,7 @@ class eventCalendar(calendar.HTMLCalendar):
         pre_month_id = "%d-%s" % (pre_month.year, str(pre_month.month).zfill(2))
         v = []
         a = v.append
-        a('<table class="table table-bordered">')
+        a('<table class="table table-bordered calendar">')
         a('\n')
         a('<thead>')
         a('<tr>')
@@ -120,6 +123,19 @@ def event_feed(request):
     return render_json_response({'events': events, 'title': feed_title}, mimetype='application/json')
 
 
+def template_feed(request):
+    memcache_key = 'template_feed'
+    template_feed_dict = memcache.get(memcache_key)
+    if template_feed_dict is not None:
+        return render_json_response({'templates': template_feed_dict}, mimetype='application/json')
+    results = EventTemplate.all().order('-updated_at').fetch(20)
+    template_feed_dict = [
+        {'template_name': r.template_name, 'title': r.title, 'id': r.key().id(), 'description': r.description} for r in
+        results]
+    memcache.set(memcache_key, template_feed_dict, 3600)
+    return render_json_response({'templates': template_feed_dict}, mimetype='application/json')
+
+
 def login(request):
     form = LoginForm()
     if request.method == "POST":
@@ -130,6 +146,7 @@ def login(request):
             if editor.password == generate_password(request.form['password']):
                 request.session['editor'] = True
                 request.session['editor_id'] = editor.key().name()
+                request.session['editor_name'] = editor.editor_name
                 return redirect(url_for('main/index'))
             return redirect(url_for('main/login', error="invalid"))
         else:
@@ -142,4 +159,6 @@ def logout(request):
         del request.session['editor']
     if 'editor_id' in request.session:
         del request.session['editor_id']
+    if 'editor_name' in request.session:
+        del request.session['editor_name']
     return redirect(url_for('main/index'))

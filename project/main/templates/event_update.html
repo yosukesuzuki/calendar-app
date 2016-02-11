@@ -41,9 +41,25 @@
         format:'YYYY-MM-DD HH:mm'
       });
       $("#event-form").on("submit", function(){
-        var isoDate = new Date($("#f_event_date").val()).toISOString();
-        $('#f_event_date').val(isoDate.replace("T", " ").slice(0,16));
+        if($("#f_event_date").exists()){
+          var isoDate = new Date($("#f_event_date").val()).toISOString();
+          $('#f_event_date').val(isoDate.replace("T", " ").slice(0,16));
+        }
       });
+      if (location.hash != "") {
+        var template_id = location.hash.split("#")[1];
+        $.ajax({
+          url: '/feed/templates',
+        }).done(function (data) {
+          $.each(data.templates, function () {
+            if(String(this.id)==template_id){
+              $("#f_description").val(this.description);
+              $("#f_title").val(this.title);
+            }
+          });
+        }).fail(function (data) {
+        });
+      }
     });
   </script>
 {% endblock %}

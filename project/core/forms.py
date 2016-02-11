@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from kay.utils.forms.modelform import ModelForm
-from core.models import Editor, Event
+from core.models import Editor, Event, EventTemplate
 
 
 class EditorForm(ModelForm):
@@ -12,4 +12,10 @@ class EditorForm(ModelForm):
 class EventForm(ModelForm):
     class Meta:
         model = Event
+        exclude = ('updated_log')
+
+
+class EventTemplateForm(ModelForm):
+    class Meta:
+        model = EventTemplate
         exclude = ('updated_log')

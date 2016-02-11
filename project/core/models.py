@@ -32,3 +32,15 @@ class Event(db.Model):
 
     def __unicode__(self):
         return self.title
+
+
+class EventTemplate(db.Model):
+    template_name = db.StringProperty(verbose_name="Name of Template", required=True)
+    title = db.StringProperty(verbose_name="Title")
+    description = db.TextProperty(verbose_name="Description", required=True)
+    updated_log = db.TextProperty()
+    updated_at = db.DateTimeProperty(auto_now=True)
+    created_at = db.DateTimeProperty(auto_now_add=True)
+
+    def __unicode__(self):
+        return self.template_name

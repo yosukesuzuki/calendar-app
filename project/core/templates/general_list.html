@@ -32,7 +32,7 @@
               <a class="btn btn-default btn-sm" href="{{ update_url(entity) }}">{{ _('Update') }}</a>
             </td>
             <td>
-              <a class="btn btn-default btn-sm" href="{{ delete_url(entity) }}">{{ _('Delete') }}</a>
+              <a class="btn btn-default btn-sm" href="{{ delete_url(entity) }}"  onClick="if(window.confirm('{{_('Delete this entity?')}}')){return true;}else{return false;}">{{ _('Delete') }}</a>
             </td>
           </tr>
         {% endfor %}

@@ -39,6 +39,9 @@ handlers:
   script: kay.main.application
   secure: always
 
+builtins:
+- appstats: on
+
 libraries:
 - name: jinja2
   version: latest

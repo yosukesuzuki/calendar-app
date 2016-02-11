@@ -21,6 +21,7 @@ MIDDLEWARE_CLASSES = (
     'kay.auth.middleware.AuthenticationMiddleware',
     'kay.sessions.middleware.SessionMiddleware',
     'kay.utils.flash.FlashMiddleware',
+    'kay.ext.appstats.middleware.AppStatsMiddleware',
 )
 
 INSTALLED_APPS = (

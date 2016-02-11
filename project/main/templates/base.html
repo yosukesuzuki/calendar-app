@@ -94,56 +94,61 @@
       color: #999;
     }
 
+    .blog-post h4,h5,h6 {
+      border-left: #ccc 6px solid;
+      padding-left: 6px;
+    }
+
     textarea {
       min-height: 100px;
       width: 100%;
     }
 
-    .table thead {
+    .calendar thead {
       background: #ccc;
     }
 
-    .table thead th {
+    .calendar thead th {
       text-align: center;
     }
 
-    .table thead th.left {
+    .calendar thead th.left {
       text-align: left;
     }
 
-    .table thead th.center {
+    .calendar thead th.center {
       text-align: center;
     }
 
-    .table thead th.right {
+    .calendar thead th.right {
       text-align: right;
     }
-    .table tbody tr {
+    .calendar tbody tr {
       min-height: 67px;
     }
 
-    .table tbody tr td {
+    .calendar tbody tr td {
       text-align: center;
       padding:5px;
       font-size:1.3em;
       line-height: 0.9;
     }
 
-    .table tbody td.sun {
+    .calendar tbody td.sun {
       background: lightpink;
     }
 
-    .table tbody td.sat {
+    .calendar tbody td.sat {
       background: lightblue;
     }
 
-    .table tbody td.today {
+    .calendar tbody td.today {
       background: #217dbb;
       color: white;
       text-decoration: underline;
     }
 
-    .table tbody td.selected {
+    .calendar tbody td.selected {
       background: #44bb9e;
       color: white;
       text-decoration: underline;
@@ -189,11 +194,20 @@
       <a class="navbar-brand" href="/">Calendar App</a>
     </div>
     <div class="navbar-collapse collapse">
-      <ul class="nav navbar-nav pull-right">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="/event/create"><span class="glyphicon glyphicon-plus"></span>Add Event</a>
+        </li>
+        <li class="dropdown">
+          <a href="/event/create" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">From Template<span class="caret"></span></a>
+          <ul class="dropdown-menu" id="dropdown-template">
+            <li><a href="/eventtemplate/list">manage templates</a></li>
+          </ul>
+        </li>
         {% if request.session['editor'] == True %}
-          <li><a href="{{ url_for('main/logout') }}">Logout</a></li>
+          <li class="pull-right"><a href="{{ url_for('main/logout') }}">Logout</a></li>
         {% else %}
-          <li><a href="{{ url_for('main/login') }}">Login</a></li>
+          <li class="pull-right"><a href="{{ url_for('main/login') }}">Login</a></li>
         {% endif %}
       </ul>
     </div>
@@ -210,5 +224,20 @@
 <script type="text/javascript" src="/media/js/moment.min.js" charset="UTF-8"></script>
 <script type="text/javascript" src="/media/js/marked.min.js" charset="UTF-8"></script>
 <script type="text/javascript" src="/media/js/bootstrap-datetimepicker.min.js" charset="UTF-8"></script>
+<script>
+  $(document).ready(function(){
+    $.ajax({url: '/feed/templates',
+    }).done(function(data){
+      var listHTML ="";
+      $.each(data.templates, function(){
+        listHTML += '<li><a href="/event/create#' + String(this.id) + '">'+this.template_name+'</a></li>';
+      });
+      $("#dropdown-template").append(listHTML);
+    }).fail(function(data){
+      $("#dropdown-template").append('<li>failed</li>');
+    });
+
+  });
+</script>
 </body>
 </html>
