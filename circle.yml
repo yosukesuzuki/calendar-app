@@ -12,3 +12,9 @@ dependencies:
 test:
   override:
     - echo $PATH | tox
+
+deployment:
+  development:
+    branch: master
+    commands:
+      - $HOME/go_appengine/appcfg.py --oauth2_refresh_token=$APPENGINE_TOKEN update .
