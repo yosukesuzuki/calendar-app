@@ -4,18 +4,23 @@
 
 import json
 import re
-from urllib2 import urlopen, URLError, HTTPError
+from urllib2 import urlopen
 
 SDK_URL = 'https://www.googleapis.com/storage/v1/b/appengine-sdks/o?prefix=featured'
 
+REGEX_SDK = re.compile(r'google_appengine_.*\.zip')
+
 
 def get_latest_sdk_url():
+    url_list = []
     f = urlopen(SDK_URL)
     sdks = json.loads(f.read())
-    regex_sdk = re.compile(r'google_appengine_.*\.zip')
     for u in sdks['items']:
-        if regex_sdk.search(u['id']):
-            return u['mediaLink']
+        if REGEX_SDK.search(u['id']):
+            url_list.append(u['mediaLink'])
+    url_list.reverse()
+    if len(url_list) > 0:
+        return url_list[0]
     return False
 
 
@@ -23,17 +28,13 @@ def dlfile(url):
     # Open the url
     try:
         f = urlopen(url)
-        print "downloading " + url
+        print("downloading " + url)
 
         # Open our local file for writing
         with open("google_appengine.zip", "wb") as local_file:
             local_file.write(f.read())
-
-    # handle errors
-    except HTTPError, e:
-        print "HTTP Error:", e.code, url
-    except URLError, e:
-        print "URL Error:", e.reason, url
+    except:
+        print("Download failed")
 
 
 def main():
@@ -41,6 +42,7 @@ def main():
     url = get_latest_sdk_url()
     if url:
         dlfile(url)
+
 
 if __name__ == '__main__':
     main()
