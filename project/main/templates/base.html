@@ -204,10 +204,12 @@
             <li><a href="/eventtemplate/list">manage templates</a></li>
           </ul>
         </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
         {% if request.session['editor'] == True %}
-          <li class="pull-right"><a href="{{ url_for('main/logout') }}">Logout</a></li>
+          <li><a href="{{ url_for('main/logout') }}">Logout</a></li>
         {% else %}
-          <li class="pull-right"><a href="{{ url_for('main/login') }}">Login</a></li>
+          <li><a href="{{ url_for('main/login') }}">Login</a></li>
         {% endif %}
       </ul>
     </div>

@@ -96,7 +96,9 @@
           });
           $("#event-feed").html(feedHTML);
         }else{
-          $("#event-feed").html(feedHTML+'<div class="blog-post"><h3 class="blog-post-title">no events</h3></div>');
+          feedHTML +='<div class="blog-post"><h3 class="blog-post-title">no events</h3>';
+          feedHTML +='<a href="/event/create" class="btn btn-default">Add Event</a></div>';
+          $("#event-feed").html(feedHTML);
         }
       }
       function drawBalloon(eventByDay){
