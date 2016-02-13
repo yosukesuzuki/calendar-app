@@ -41,7 +41,7 @@
         format:'YYYY-MM-DD HH:mm'
       });
       $("#event-form").on("submit", function(){
-        if($("#f_event_date").exists()){
+        if($("#f_event_date").size() > 0){
           var isoDate = new Date($("#f_event_date").val()).toISOString();
           $('#f_event_date').val(isoDate.replace("T", " ").slice(0,16));
         }
