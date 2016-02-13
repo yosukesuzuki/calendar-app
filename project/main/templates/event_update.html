@@ -8,14 +8,20 @@
     </div>
     <div class="row">
       <div class="col-sm-8 blog-main">
-      {{ request.form.errors }}
+        {{ request.form.errors }}
         {% call form(class_='form-horizontal',role='form', id='event-form') %}
           {% for f in form %}
             <div class="form-group">
               {{ form[f.name].label(class_='col-lg-2 control-label')|safe }}
+              {% if f.name == "description" %}
+                <div class="col-lg-10">
+                  {{ form[f.name].render(class_='form-control', rows='12')|safe }}
+                </div>
+              {% else %}
               <div class="col-lg-10">
                 {{ form[f.name].render(class_='form-control')|safe }}
               </div>
+              {% endif %}
               {% if f.errors|length > 0 %}
                 {% for e in f.errors %}
                   <div class="alert alert-warning" role="alert">{{ e }}</div>
@@ -32,24 +38,35 @@
   </div>
   <script>
     $(document).ready(function () {
-      if($("#f_event_date").val() != '') {
+      if ($("#f_event_date").val() != '') {
         var localTime = moment.utc($("#f_event_date").val()).toDate();
         localTime = moment(localTime).format('YYYY-MM-DD HH:mm');
         $("#f_event_date").val(localTime);
       }
       $('#f_event_date').datetimepicker({
-        format:'YYYY-MM-DD HH:mm'
+        format: 'YYYY-MM-DD HH:mm'
       });
-      $("#event-form").on("submit", function(){
-        if($("#f_event_date").size() > 0){
+      $("#event-form").on("submit", function () {
+        if ($("#f_event_date").size() > 0) {
           var isoDate = new Date($("#f_event_date").val()).toISOString();
-          $('#f_event_date').val(isoDate.replace("T", " ").slice(0,16));
+          $('#f_event_date').val(isoDate.replace("T", " ").slice(0, 16));
         }
       });
       if (location.hash != "") {
         setFromTemplate();
       }
       window.onhashchange = setFromTemplate;
+      $('#f_description').on('keyup', function (e) {
+        if (e.keyCode == 13) {
+          var currentLineNumber = this.value.substr(0, this.selectionStart).split("\n").length;
+          var lines = $(this).val().split('\n');
+          if (currentLineNumber > 2) {
+            if ((lines[currentLineNumber - 2].startsWith('* ') || lines[currentLineNumber - 2].startsWith('- ')) && lines[currentLineNumber - 2].length > 2 && lines[currentLineNumber - 1].length == 0) {
+              insertAtCursor("* ", this);
+            }
+          }
+        }
+      });
     });
     function setFromTemplate() {
       var templateId = location.hash.split("#")[1];
@@ -57,13 +74,35 @@
         url: '/feed/templates',
       }).done(function (data) {
         $.each(data.templates, function () {
-          if(String(this.id)==templateId){
+          if (String(this.id) == templateId) {
             $("#f_description").val(this.description);
             $("#f_title").val(this.title);
           }
         });
       }).fail(function (data) {
       });
+    }
+    // thanks to http://output.jsbin.com/ixoyes/2
+    function insertAtCursor(text, textarea) {
+      var field = textarea;
+      if (document.selection) {
+        var range = document.selection.createRange();
+        if (!range || range.parentElement() != field) {
+          field.focus();
+          range = field.createTextRange();
+          range.collapse(false);
+        }
+        range.text = text;
+        range.collapse(false);
+        range.select();
+      } else {
+        field.focus();
+        var val = field.value;
+        var selStart = field.selectionStart;
+        var caretPos = selStart + text.length;
+        field.value = val.slice(0, selStart) + text + val.slice(field.selectionEnd);
+        field.setSelectionRange(caretPos, caretPos);
+      }
     }
   </script>
 {% endblock %}
