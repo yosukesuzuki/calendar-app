@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import calendar
+import icalendar
 from datetime import datetime, date, timedelta
-from werkzeug import redirect
+from werkzeug import redirect, Response
 from google.appengine.api import memcache
 from kay.utils import render_to_response, url_for, render_json_response
 from kay.utils import forms
@@ -134,6 +135,16 @@ def template_feed(request):
         results]
     memcache.set(memcache_key, template_feed_dict, 3600)
     return render_json_response({'templates': template_feed_dict}, mimetype='application/json')
+
+
+def ical(request, event_key):
+    event = Event.get(event_key)
+    if event is None:
+        return render_json_response({'error': '404 not found'}, mimetype='application/json', status=404)
+    cal = icalendar.Calendar()
+    cal['dtstart'] = event.event_date.strftime('%Y%m%dT%H%M%S')
+    cal['summary'] = event.description
+    return Response(cal.to_ical(), status=200, mimetype="text/calendar")
 
 
 def login(request):

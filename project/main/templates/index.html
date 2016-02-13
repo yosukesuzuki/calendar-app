@@ -42,7 +42,7 @@
           var feedTemplate = `
                 <div class="blog-post">
                     <h3 class="blog-post-title">$title</h3>
-                    <p>$date</p>
+                    <p>$date <a href="/ical/$key"><span class="glyphicon glyphicon-calendar"></span></a></p>
                     <p>$description</p>
                     <a type="button" class="btn btn-default" aria-label="Left Align" href="/event/update/$key">
                       <span class="glyphicon glyphicon-edit" aria-hidden="true">Edit</span>
@@ -63,7 +63,7 @@
             var aDayFeedHTML = feedTemplate.replace('$title', val.title)
                 .replace('$date', localTime)
                 .replace('$description', marked(val.description,  { renderer: renderer }))
-                .replace('$key', val.key);
+                .replace(/\$key/g , val.key);
             if((aDay >= utcNow)&&(i < 30)){
               feedHTML += aDayFeedHTML;
             }
