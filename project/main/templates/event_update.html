@@ -62,7 +62,7 @@
           var lines = $(this).val().split('\n');
           if (currentLineNumber > 2) {
             if ((lines[currentLineNumber - 2].startsWith('* ') || lines[currentLineNumber - 2].startsWith('- ')) && lines[currentLineNumber - 2].length > 2 && lines[currentLineNumber - 1].length == 0) {
-              insertAtCursor("* ", this);
+              insertAtCursor(lines[currentLineNumber - 2].slice(0,2), this);
             }
           }
         }
