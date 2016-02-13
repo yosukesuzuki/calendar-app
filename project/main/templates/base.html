@@ -44,6 +44,7 @@
     .blog-main {
       font-size: 18px;
       line-height: 1.5;
+      padding-left: 19px;
     }
 
     /* Sidebar modules for boxing content */
@@ -94,7 +95,7 @@
       color: #999;
     }
 
-    .blog-post h4,h5,h6 {
+    .blog-post h4, h5, h6 {
       border-left: #ccc 6px solid;
       padding-left: 6px;
     }
@@ -125,14 +126,15 @@
       text-align: right;
       cursor: pointer;
     }
+
     .calendar tbody tr {
       min-height: 67px;
     }
 
     .calendar tbody tr td {
       text-align: center;
-      padding:5px;
-      font-size:1.3em;
+      padding: 5px;
+      font-size: 1.3em;
       line-height: 0.9;
       cursor: pointer;
     }
@@ -179,6 +181,7 @@
         transform: scale(1) rotate(360deg);
       }
     }
+
     .blog-main h2 {
       margin-top: 0px;
     }
@@ -202,7 +205,8 @@
           <a href="/event/create"><span class="glyphicon glyphicon-plus"></span>Add Event</a>
         </li>
         <li class="dropdown">
-          <a href="/event/create" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">From Template<span class="caret"></span></a>
+          <a href="/event/create" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+             aria-expanded="false">From Template<span class="caret"></span></a>
           <ul class="dropdown-menu" id="dropdown-template">
             <li><a href="/eventtemplate/list">manage templates</a></li>
           </ul>
@@ -230,15 +234,16 @@
 <script type="text/javascript" src="/media/js/marked.min.js" charset="UTF-8"></script>
 <script type="text/javascript" src="/media/js/bootstrap-datetimepicker.min.js" charset="UTF-8"></script>
 <script>
-  $(document).ready(function(){
-    $.ajax({url: '/feed/templates',
-    }).done(function(data){
-      var listHTML ="";
-      $.each(data.templates, function(){
-        listHTML += '<li><a href="/event/create#' + String(this.id) + '">'+this.template_name+'</a></li>';
+  $(document).ready(function () {
+    $.ajax({
+      url: '/feed/templates',
+    }).done(function (data) {
+      var listHTML = "";
+      $.each(data.templates, function () {
+        listHTML += '<li><a href="/event/create#' + String(this.id) + '">' + this.template_name + '</a></li>';
       });
       $("#dropdown-template").append(listHTML);
-    }).fail(function(data){
+    }).fail(function (data) {
       $("#dropdown-template").append('<li>failed</li>');
     });
 
