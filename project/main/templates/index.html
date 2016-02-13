@@ -76,9 +76,11 @@
           $("#event-feed").html(feedHTML);
           drawBalloon(eventByDay);
           $(document).on("click", "td.aday", function () {
+            location.hash = '';
             $(".selected").removeClass("selected");
             $(this).addClass("selected");
             drawEventList(eventByDay, $(this).attr('id'));
+            location.hash = '#event-feed';
           });
           d.resolve();
         }).fail(function(data){
