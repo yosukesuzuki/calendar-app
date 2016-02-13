@@ -71,7 +71,7 @@ class eventCalendar(calendar.HTMLCalendar):
 
 
 class LoginForm(forms.Form):
-    editor_id = forms.TextField(required=True, max_length=5)
+    editor_id = forms.TextField(required=True, max_length=30)
     password = forms.TextField(required=True, widget=forms.PasswordInput)
 
 
