@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import calendar
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 from werkzeug import redirect
 from google.appengine.api import memcache
 from kay.utils import render_to_response, url_for, render_json_response
@@ -113,7 +113,7 @@ def event_feed(request):
         theyear = now.year
         themonth = now.month
         feed_title = 'Upcoming Event'
-    first_day_of_themonth = datetime(theyear, themonth, 1)
+    first_day_of_themonth = datetime(theyear, themonth, 1) + timedelta(days=-1)
     three_month_after = add_months(first_day_of_themonth, 2)
     results = Event.all().filter(u'event_date >=', first_day_of_themonth).filter(
         u'event_date <', three_month_after).order('event_date').fetch(1000)
