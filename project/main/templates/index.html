@@ -33,8 +33,14 @@
       function initEventList(){
         var d = $.Deferred();
         var feedURL = "/feed/events";
-        if(getUrlParameter('month') != undefined){
-          feedURL += '?month='+getUrlParameter('month')
+        var monthParam = getUrlParameter('month');
+        var monthParamFlg = false;
+        if(monthParam != undefined && monthParam.split('-').length == 2){
+          var monthValue = parseInt(monthParam.split('-')[1]);
+          if(monthValue < 13 && monthValue > 0) {
+            feedURL += '?month=' + getUrlParameter('month');
+            monthParamFlg = true;
+          }
         }
         $.ajax({url: feedURL,
         }).done(function(data){
@@ -50,7 +56,10 @@
                 </div>
                 <hr/>
               `;
-          var utcNow = moment.utc().format('YYYY-MM-DD');
+          var startDay = moment.utc().format('YYYY-MM-DD');
+          if(monthParamFlg){
+            startDay = getUrlParameter('month')+'-01';
+          }
           var eventByDay = {};
           var renderer = new marked.Renderer();
           renderer.heading = function (text, level) {
@@ -64,7 +73,7 @@
                 .replace('$date', localTime)
                 .replace('$description', marked(val.description,  { renderer: renderer }))
                 .replace(/\$key/g , val.key);
-            if((aDay >= utcNow)&&(i < 30)){
+            if((aDay >= startDay)&&(i < 30)){
               feedHTML += aDayFeedHTML;
             }
             if(aDay in eventByDay){

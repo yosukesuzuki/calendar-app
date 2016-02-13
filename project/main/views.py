@@ -87,6 +87,8 @@ def index(request):
         try:
             theyear = int(month_data[0])
             themonth = int(month_data[1])
+            if themonth < 1 or themonth > 12:
+                raise ValueError
         except:
             theyear = now.year
             themonth = now.month
@@ -109,6 +111,8 @@ def event_feed(request):
         theyear = int(theyear_themonth[0])
         themonth = int(theyear_themonth[1])
         feed_title = 'Events of: %s %d' % (calendar.month_name[themonth], theyear)
+        if themonth < 1 or themonth > 12:
+            raise ValueError
     except:
         now = datetime.now()
         theyear = now.year
