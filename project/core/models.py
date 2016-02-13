@@ -25,7 +25,7 @@ class Editor(db.Model):
 class Event(db.Model):
     event_date = db.DateTimeProperty(verbose_name="Event Date", required=True)
     title = db.StringProperty(verbose_name="Title", required=True)
-    description = db.TextProperty(verbose_name="Description", required=True)
+    description = db.TextProperty(verbose_name="Description (markdown)", required=True)
     updated_log = db.TextProperty()
     updated_at = db.DateTimeProperty(auto_now=True)
     created_at = db.DateTimeProperty(auto_now_add=True)
