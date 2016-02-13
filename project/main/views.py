@@ -144,7 +144,8 @@ def ical(request, event_key):
     cal = icalendar.Calendar()
     cal['dtstart'] = event.event_date.strftime('%Y%m%dT%H%M%S')
     cal['summary'] = event.description
-    return Response(cal.to_ical(), status=200, mimetype="text/calendar")
+    return Response(cal.to_ical(), status=200, mimetype="text/calendar; charset=utf-8",
+                    headers={'Content-Disposition': 'inline; filename=event.ics'})
 
 
 def login(request):
