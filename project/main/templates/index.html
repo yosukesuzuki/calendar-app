@@ -80,7 +80,9 @@
             $(".selected").removeClass("selected");
             $(this).addClass("selected");
             drawEventList(eventByDay, $(this).attr('id'));
-            location.hash = '#event-feed';
+            if (window.matchMedia('(max-width: 769px)').matches) {
+              location.hash = '#event-feed';
+            }
           });
           d.resolve();
         }).fail(function(data){
