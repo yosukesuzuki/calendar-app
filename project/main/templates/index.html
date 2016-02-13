@@ -73,7 +73,7 @@
                 .replace('$date', localTime)
                 .replace('$description', marked(val.description,  { renderer: renderer }))
                 .replace(/\$key/g , val.key);
-            if((aDay >= startDay)&&(i < 30)){
+            if((aDay >= startDay)&&(feedHTML.length < 15000)){
               feedHTML += aDayFeedHTML;
             }
             if(aDay in eventByDay){
