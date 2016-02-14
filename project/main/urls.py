@@ -81,6 +81,7 @@ view_groups = [
         Rule('/ical/<string:event_key>', endpoint='ical', view='main.views.ical'),
         Rule('/login', endpoint='login', view='main.views.login'),
         Rule('/logout', endpoint='logout', view='main.views.logout'),
+        Rule('/403', endpoint='error403', view='main.views.error403'),
     ),
     EventCRUDViewGroup(),
     EventTemplateCRUDViewGroup(),

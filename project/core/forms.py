@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
 
 from kay.utils.forms.modelform import ModelForm
-from core.models import Editor, Event, EventTemplate
+from core.models import Editor, Event, EventTemplate, LiveSetting
+
+
+class LiveSettingForm(ModelForm):
+    class Meta:
+        model = LiveSetting
 
 
 class EditorForm(ModelForm):

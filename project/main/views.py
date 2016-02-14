@@ -1,13 +1,51 @@
 # -*- coding: utf-8 -*-
 import calendar
 import icalendar
+import logging
 from datetime import datetime, date, timedelta
 from werkzeug import redirect, Response
 from google.appengine.api import memcache
 from kay.utils import render_to_response, url_for, render_json_response
 from kay.utils import forms
-from core.models import Editor, Event, EventTemplate
+from core.models import Editor, Event, EventTemplate, LiveSetting
 from admin.urls import generate_password
+
+from functools import update_wrapper
+
+
+def get_restriction(restriction_key_name):
+    memcache_key = 'setting-' + restriction_key_name
+    restriction_data = memcache.get(memcache_key)
+    if restriction_data is not None:
+        return restriction_data
+    restriction_data_entity = LiveSetting.get_by_key_name(restriction_key_name)
+    if restriction_data_entity is None:
+        return None
+    restriction_data = restriction_data_entity.setting_value
+    memcache.set(memcache_key, restriction_data)
+    return restriction_data
+
+
+def check_if_ip_address_match(restriction_data, remote_addr):
+    ip_address_patterns = restriction_data.split(',')
+    for pattern in ip_address_patterns:
+        if remote_addr.startswith(pattern):
+            return True
+    return False
+
+
+def access_restrict(func):
+    def inner(request, *args, **kwargs):
+        restriction_key_name = 'restriction_ip'
+        restriction_data = get_restriction(restriction_key_name)
+        if restriction_data is not None:
+            if (check_if_ip_address_match(restriction_data, request.remote_addr) is False) and (
+                            ('editor' in request.session) is False or request.session['editor'] is not True):
+                logging.warning('access not allowed, remote addr: %s' % request.remote_addr)
+                return redirect(url_for('main/error403'))
+        return func(request, *args, **kwargs)
+    update_wrapper(inner, func)
+    return inner
 
 
 def add_months(sourcedate, months):
@@ -76,6 +114,7 @@ class LoginForm(forms.Form):
     password = forms.TextField(required=True, widget=forms.PasswordInput)
 
 
+@access_restrict
 def index(request):
     try:
         selectd_month_id = request.args["month"]
@@ -105,6 +144,7 @@ def index(request):
     return render_to_response('main/index.html', {'calendar': calendar_html})
 
 
+@access_restrict
 def event_feed(request):
     try:
         theyear_themonth = request.args['month'].split('-')
@@ -128,6 +168,7 @@ def event_feed(request):
     return render_json_response({'events': events, 'title': feed_title}, mimetype='application/json')
 
 
+@access_restrict
 def template_feed(request):
     memcache_key = 'template_feed'
     template_feed_dict = memcache.get(memcache_key)
@@ -141,6 +182,7 @@ def template_feed(request):
     return render_json_response({'templates': template_feed_dict}, mimetype='application/json')
 
 
+@access_restrict
 def ical(request, event_key):
     event = Event.get(event_key)
     if event is None:
@@ -178,3 +220,7 @@ def logout(request):
     if 'editor_name' in request.session:
         del request.session['editor_name']
     return redirect(url_for('main/index'))
+
+
+def error403(request):
+    return render_to_response('main/403.html', {}, status=403)

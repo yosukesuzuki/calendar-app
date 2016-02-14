@@ -11,6 +11,16 @@ class AdminUser(GoogleUser):
     allowed = db.BooleanProperty(default=False)
 
 
+class LiveSetting(db.Model):
+    setting_id = db.StringProperty(verbose_name="Setting ID", required=True)
+    setting_value = db.StringProperty(verbose_name="Setting Value", required=True)
+    updated_at = db.DateTimeProperty(auto_now=True)
+    created_at = db.DateTimeProperty(auto_now_add=True)
+
+    def __unicode__(self):
+        return self.setting_id
+
+
 class Editor(db.Model):
     editor_id = db.StringProperty(verbose_name="Editor ID", required=True)
     password = db.StringProperty(verbose_name="Password", required=True)
