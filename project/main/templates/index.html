@@ -118,7 +118,7 @@
         $.each($("table tbody tr td"), function(){
           if($(this).attr('id') in eventByDay) {
             this.querySelector('span').setAttribute("class","badge");
-            this.querySelector('span').innerText = eventByDay[$(this).attr('id')].length;
+            this.querySelector('span').innerHTML = eventByDay[$(this).attr('id')].length;
           }
         });
       }
