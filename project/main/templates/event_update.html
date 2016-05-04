@@ -4,7 +4,7 @@
 {% block content %}
   <div class="container">
     <div class="blog-header">
-      <h1 class="blog-title">Event Editor</h1>
+        <h1 class="blog-title">{{_('Event Editor')}}</h1>
     </div>
     <div class="row">
       <div class="col-sm-8 blog-main">
@@ -24,7 +24,7 @@
               {% endif %}
               {% if f.errors|length > 0 %}
                 {% for e in f.errors %}
-                  <div class="alert alert-warning" role="alert">{{ e }}</div>
+                <div class="alert alert-warning" role="alert"> {{ e }} </div>
                 {% endfor %}
               {% endif %}
             </div>

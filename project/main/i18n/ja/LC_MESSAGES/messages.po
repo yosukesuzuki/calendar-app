@@ -1,0 +1,87 @@
+# Japanese translations for PROJECT.
+# Copyright (C) 2016 Takashi Matsuo
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2016.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: tmatsuo@candit.jp\n"
+"POT-Creation-Date: 2016-05-04 23:43+0900\n"
+"PO-Revision-Date: 2016-05-04 14:14+0900\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: ja\n"
+"Language-Team: ja <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.3.4\n"
+
+#: main/views.py:161
+msgid "Upcoming Event"
+msgstr "直近のイベント"
+
+#: main/templates/403.html:7
+msgid "Not Authorized"
+msgstr "認証されていません"
+
+#: main/templates/403.html:12 main/templates/base.html:219
+#: main/templates/login.html:7 main/templates/login.html:24
+msgid "Login"
+msgstr "ログイン"
+
+#: main/templates/base.html:10 main/templates/base.html:200
+#: main/templates/index.html:7
+msgid "Event Calendar"
+msgstr "イベントカレンダー"
+
+#: main/templates/base.html:205 main/templates/index.html:113
+msgid "Add Event"
+msgstr "イベントを追加"
+
+#: main/templates/base.html:209
+msgid "From Template"
+msgstr "テンプレートから作成"
+
+#: main/templates/base.html:211
+msgid "manage templates"
+msgstr "テンプレートの管理"
+
+#: main/templates/base.html:217
+msgid "Logout"
+msgstr "ログアウト"
+
+#: main/templates/base.html:247
+msgid "failed"
+msgstr "更新にに失敗しました"
+
+#: main/templates/event_update.html:7
+msgid "Event Editor"
+msgstr "イベントを編集"
+
+#: main/templates/event_update.html:33
+msgid "Save"
+msgstr "保存"
+
+#: main/templates/index.html:14
+msgid "Loading..."
+msgstr "更新中..."
+
+#: main/templates/index.html:54
+msgid "Edit"
+msgstr "編集"
+
+#: main/templates/index.html:105
+msgid "Events"
+msgstr "イベント"
+
+#: main/templates/index.html:112
+msgid "no events"
+msgstr "イベントはありません"
+
+#: main/templates/login.html:9
+msgid "Login failed"
+msgstr "ログインに失敗しました"
+

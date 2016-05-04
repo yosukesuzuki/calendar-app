@@ -7,6 +7,7 @@ from werkzeug import redirect, Response
 from google.appengine.api import memcache
 from kay.utils import render_to_response, url_for, render_json_response
 from kay.utils import forms
+from kay.i18n import gettext as _
 from core.models import Editor, Event, EventTemplate, LiveSetting
 from admin.urls import generate_password
 
@@ -157,7 +158,7 @@ def event_feed(request):
         now = datetime.now()
         theyear = now.year
         themonth = now.month
-        feed_title = 'Upcoming Event'
+        feed_title = _('Upcoming Event')
     first_day_of_themonth = datetime(theyear, themonth, 1) + timedelta(days=-1)
     three_month_after = add_months(first_day_of_themonth, 2)
     results = Event.all().filter(u'event_date >=', first_day_of_themonth).filter(
