@@ -6,7 +6,7 @@ Extract Messages
 
 Extract messages into a PO-Template.
 
-:Copyright: (c) 2009 Accense Technology, Inc. 
+:Copyright: (c) 2009 Accense Technology, Inc.
                      Takashi Matsuo <tmatsuo@candit.jp>,
                      All rights reserved.
 :copyright: (c) 2009 by the Zine Team, see AUTHORS for more details.
@@ -116,9 +116,21 @@ def do_extract_messages(target=('t', ''), domain=('d', 'messages'),
                                COMMENT_TAGS, callback=callback,
                                strip_comment_tags=True)
 
-  for filename, lineno, message, comments in extracted:
+
+  # original kay code
+  # for filename, lineno, message, comments in extracted:
+    # catalog.add(message, None, [(strip_path(filename, root), lineno)],
+                # auto_comments=comments)
+  # raise ValueError: too many values to unpack
+
+  for phrase in extracted:
+    filename = phrase[0]
+    lineno = phrase[1]
+    message = phrase[2]
+    comments = phrase[3]
     catalog.add(message, None, [(strip_path(filename, root), lineno)],
-                auto_comments=comments)
+            auto_comments=comments)
+
   if not i18n_dir:
     i18n_dir = path.join(root, 'i18n')
   if not path.isdir(i18n_dir):
