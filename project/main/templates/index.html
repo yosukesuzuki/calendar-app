@@ -4,14 +4,14 @@
 {% block content %}
     <div class="container">
         <div class="blog-header">
-            <h1 class="blog-title">Event Calendar</h1>
+            <h1 class="blog-title">{{_('Event Calendar')}}</h1>
         </div>
         <div class="row">
             <div class="col-sm-5">
                 {{ calendar|safe }}
             </div>
             <div class="col-sm-7 blog-main" id="event-feed">
-              <button class="btn btn-lg btn-warning"><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Loading...</button>
+                <button class="btn btn-lg btn-warning"><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> {{_('Loading...')}}</button>
             </div>
         </div>
     </div>
@@ -51,7 +51,7 @@
                     <p>$date</p>
                     <p>$description</p>
                     <a type="button" class="btn btn-default" aria-label="Left Align" href="/event/update/$key">
-                      <span class="glyphicon glyphicon-edit" aria-hidden="true">Edit</span>
+                    <span class="glyphicon glyphicon-edit" aria-hidden="true">{{_('Edit')}}</span>
                     </a>
                 </div>
                 <hr/>
@@ -102,15 +102,15 @@
       }
       function drawEventList(eventByDay, aDay){
         console.log('selected!:'+aDay);
-        var feedHTML = "<h2>"+aDay+"&nbsp;Events</h2>";
+        var feedHTML = "<h2>"+aDay+"&nbsp;{{_('Events')}}</h2>";
         if(aDay in eventByDay) {
           $.each(eventByDay[aDay], function(){
             feedHTML += this;
           });
           $("#event-feed").html(feedHTML);
         }else{
-          feedHTML +='<div class="blog-post"><h3 class="blog-post-title">no events</h3>';
-          feedHTML +='<a href="/event/create" class="btn btn-default">Add Event</a></div>';
+          feedHTML +='<div class="blog-post"><h3 class="blog-post-title">{{_('no events')}}</h3>';
+          feedHTML +='<a href="/event/create" class="btn btn-default">{{_('Add Event')}}</a></div>';
           $("#event-feed").html(feedHTML);
         }
       }
