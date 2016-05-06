@@ -9,7 +9,10 @@ class KayTranslations(TranslationsBase):
   def __init__(self, fileobj=None, locale=None):
     self.lang = locale
     self._catalog = {}
-    TranslationsBase.__init__(self, fileobj=fileobj)
+    try:
+        TranslationsBase.__init__(self, fileobj=fileobj)
+    except TypeError:
+        TranslationsBase.__init__(self, fp=fileobj)
     if not hasattr(self, "plural"):
       self.plural = lambda n: int(n != 1)
 

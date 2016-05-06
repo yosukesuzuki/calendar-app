@@ -4,9 +4,9 @@
 {% block content %}
 <div class="container">
   <div class="blog-header">
-    <h1 class="blog-title">Login</h1>
+      <h1 class="blog-title">{{_('Login')}}</h1>
     {% if request.args['error'] == 'invalid' %}
-    <p class="lead blog-description">Login failed</p>
+    <p class="lead blog-description">{{_('Login failed')}}</p>
     {% endif %}
   </div>
  <div class="row">
@@ -21,7 +21,7 @@
         </div>
         {% endfor %}
         <div class="form-actions">
-          <button class="btn btn-lg btn-block btn-primary" type="submit">Login</button>
+            <button class="btn btn-lg btn-block btn-primary" type="submit">{{_('Login')}}</button>
         </div>
       {% endcall %}
     </div>
