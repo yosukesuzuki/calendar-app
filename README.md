@@ -79,5 +79,5 @@ $ python manage.py compile_translations main
 ```
 
 # contributor
-- yosukesuzuki
-- satotake
+- [yosukesuzuki](https://github.com/yosukesuzuki)
+- [satotake](https://github.com/satotake)
