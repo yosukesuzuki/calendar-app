@@ -78,3 +78,6 @@ $ python manage.py update_translations -t main -l ja # diff
 $ python manage.py compile_translations main
 ```
 
+# contributor
+- yosukesuzuki
+- satotake
