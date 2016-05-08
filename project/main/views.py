@@ -189,8 +189,15 @@ def ical(request, event_key):
     if event is None:
         return render_json_response({'error': '404 not found'}, mimetype='application/json', status=404)
     cal = icalendar.Calendar()
-    cal['dtstart'] = event.event_date.strftime('%Y%m%dT%H%M%S')
-    cal['summary'] = event.description
+    eve = icalendar.Event()
+    eve['dtstart'] = event.event_date.strftime('%Y%m%dT%H%M%S')
+    eve['created'] = event.created_at.strftime('%Y%m%dT%H%M%S')
+    eve['last-modified'] = event.updated_at.strftime('%Y%m%dT%H%M%S')
+    eve['summary'] = event.title
+    eve['description'] = event.description
+    eve['event_key'] = event_key
+    eve['updated_log'] = event.updated_log
+    cal.add_component(eve)
     return Response(cal.to_ical(), status=200, mimetype="text/calendar",
                     headers={'Content-Disposition': 'inline; filename=event.ics'})
 
