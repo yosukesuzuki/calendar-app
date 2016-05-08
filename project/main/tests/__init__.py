@@ -1,2 +1,2 @@
 # -*- coding: utf-8 -*-
-from test_views import DownloadicsTesta  # noqa
+from test_views import DownloadicsTest  # noqa
