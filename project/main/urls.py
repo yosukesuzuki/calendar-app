@@ -78,6 +78,7 @@ view_groups = [
         Rule('/', endpoint='index', view='main.views.index'),
         Rule('/feed/events', endpoint='event_feed', view='main.views.event_feed'),
         Rule('/feed/templates', endpoint='template_feed', view='main.views.template_feed'),
+        Rule('/ical/all', endpoint='ical_alll', view='main.views.ical_all'),
         Rule('/ical/<string:event_key>', endpoint='ical', view='main.views.ical'),
         Rule('/login', endpoint='login', view='main.views.login'),
         Rule('/logout', endpoint='logout', view='main.views.logout'),

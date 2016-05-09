@@ -202,6 +202,24 @@ def ical(request, event_key):
                     headers={'Content-Disposition': 'inline; filename=event.ics'})
 
 
+@access_restrict
+def ical_all(request):
+    events_list = Event.all()
+    cal = icalendar.Calendar()
+    for event in events_list:
+        eve = icalendar.Event()
+        eve['dtstart'] = event.event_date.strftime('%Y%m%dT%H%M%S')
+        eve['created'] = event.created_at.strftime('%Y%m%dT%H%M%S')
+        eve['last-modified'] = event.updated_at.strftime('%Y%m%dT%H%M%S')
+        eve['summary'] = event.title
+        eve['description'] = event.description
+        eve['event_key'] = event.key
+        eve['updated_log'] = event.updated_log
+        cal.add_component(eve)
+    return Response(cal.to_ical(), status=200, mimetype="text/calendar",
+                    headers={'Content-Disposition': 'inline; filename=event.ics'})
+
+
 def login(request):
     form = LoginForm()
     if request.method == "POST":
