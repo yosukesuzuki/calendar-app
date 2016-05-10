@@ -185,8 +185,8 @@ def template_feed(request):
 
 @access_restrict
 def ical(request, event_key):
-    if event_key == 'all':
-        events_list = Event.all()
+    if event_key == 'future':
+        events_list = Event.all().filter(u'event_date >=', datetime.now())
     else:
         events_list = [Event.get(event_key)]
     if events_list is None:

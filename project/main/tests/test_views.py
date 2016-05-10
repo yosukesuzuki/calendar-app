@@ -17,13 +17,13 @@ class DownloadicsTest(GAETestBase):
         self.client = Client(app, BaseResponse)
 
         self.test_values_0 = {
-            'date': datetime.datetime(2016, 5, 20, 15, 0),
+            'date': datetime.datetime(2216, 5, 20, 15, 0),
             'title': 'THIS IS TITLE',
             'description': 'THIS IS SUMMARY',
         }
 
         self.test_values_1 = {
-            'date': datetime.datetime(2016, 6, 20, 15, 0),
+            'date': datetime.datetime(2216, 6, 20, 15, 0),
             'title': 'THIS IS ALSO TITLE',
             'description': 'THIS IS ALSO SUMMARY',
         }
@@ -61,7 +61,7 @@ class DownloadicsTest(GAETestBase):
         self.assertEquals(reparsed_eve['description'].to_ical(), self.test_values_0['description'])
 
     def test_download_all_events_icsfile(self):
-        target_url = urlparse.urljoin('/ical/', 'all')
+        target_url = urlparse.urljoin('/ical/', 'future')
         res = self.client.get(target_url)
         self.assertEquals(res.status_code, 200)
 
