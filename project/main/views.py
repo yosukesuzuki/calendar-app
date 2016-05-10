@@ -185,18 +185,11 @@ def template_feed(request):
 
 @access_restrict
 def ical(request, event_key):
-    event = Event.get(event_key)
-    if event is None:
-        return render_json_response({'error': '404 not found'}, mimetype='application/json', status=404)
-    cal = make_icalfile([event])
-    return Response(cal, status=200, mimetype="text/calendar",
-                    headers={'Content-Disposition': 'inline; filename=event.ics'})
-
-
-@access_restrict
-def ical_all(request):
-    events_list = Event.all()
-    if not events_list:
+    if event_key == 'all':
+        events_list = Event.all()
+    else:
+        events_list = [Event.get(event_key)]
+    if events_list is None:
         return render_json_response({'error': '404 not found'}, mimetype='application/json', status=404)
     cal = make_icalfile(events_list)
     return Response(cal, status=200, mimetype="text/calendar",
@@ -212,7 +205,7 @@ def make_icalfile(event_model_list):
         eve['last-modified'] = event.updated_at.strftime('%Y%m%dT%H%M%S')
         eve['summary'] = event.title
         eve['description'] = event.description
-        eve['event_key'] = event.key
+        eve['event_key'] = event.key()
         eve['updated_log'] = event.updated_log
         cal.add_component(eve)
     return cal.to_ical()
