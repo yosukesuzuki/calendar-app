@@ -185,21 +185,30 @@ def template_feed(request):
 
 @access_restrict
 def ical(request, event_key):
-    event = Event.get(event_key)
-    if event is None:
+    if event_key == 'future':
+        events_list = Event.all().filter(u'event_date >=', datetime.now())
+    else:
+        events_list = [Event.get(event_key)]
+    if events_list is None:
         return render_json_response({'error': '404 not found'}, mimetype='application/json', status=404)
-    cal = icalendar.Calendar()
-    eve = icalendar.Event()
-    eve['dtstart'] = event.event_date.strftime('%Y%m%dT%H%M%S')
-    eve['created'] = event.created_at.strftime('%Y%m%dT%H%M%S')
-    eve['last-modified'] = event.updated_at.strftime('%Y%m%dT%H%M%S')
-    eve['summary'] = event.title
-    eve['description'] = event.description
-    eve['event_key'] = event_key
-    eve['updated_log'] = event.updated_log
-    cal.add_component(eve)
-    return Response(cal.to_ical(), status=200, mimetype="text/calendar",
+    cal = make_icalfile(events_list)
+    return Response(cal, status=200, mimetype="text/calendar",
                     headers={'Content-Disposition': 'inline; filename=event.ics'})
+
+
+def make_icalfile(event_model_list):
+    cal = icalendar.Calendar()
+    for event in event_model_list:
+        eve = icalendar.Event()
+        eve['dtstart'] = event.event_date.strftime('%Y%m%dT%H%M%S')
+        eve['created'] = event.created_at.strftime('%Y%m%dT%H%M%S')
+        eve['last-modified'] = event.updated_at.strftime('%Y%m%dT%H%M%S')
+        eve['summary'] = event.title
+        eve['description'] = event.description
+        eve['event_key'] = event.key()
+        eve['updated_log'] = event.updated_log
+        cal.add_component(eve)
+    return cal.to_ical()
 
 
 def login(request):
