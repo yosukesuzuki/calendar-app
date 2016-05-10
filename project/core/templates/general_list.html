@@ -13,6 +13,11 @@
         <div class="col-sm-3">
         <a href="{{ create_url() }}" class="btn btn-primary" id="createEntity">Create new entity</a>
         </div>
+        {% if model == "Event" %}
+        <div class="col-sm-3 pull-right">
+            <a href="/ical/future" class="btn btn-primary" id="exportFutureEvents">{{_('Export Future Events')}}</a>
+        </div>
+        {% endif %}
       </div>
       <table id="content-list-table" class="table table-bordered table-hover">
         <thead>
